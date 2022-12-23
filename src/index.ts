@@ -1,6 +1,11 @@
 import { AppDataSource } from "./data-source"
 import { User } from "./entity/User"
 import { UserController } from "../controller/user.controller";
+import { ProvinciaController } from "../controller/provincia.controller";
+import { FincaController } from "../controller/finca.controller";
+import { EquiposController } from "../controller/equipos.controller";
+import { CultivosController } from "../controller/cultives.controller";
+import { AnimalsController } from "../controller/animals.controller";
 
 
 const express = require('express')
@@ -26,9 +31,20 @@ AppDataSource.initialize().then(async () => {
     // var routes = require('./url/url');
     // const inicio = require('./controllers/apis');
     const user_controller = new UserController(); 
+    const provincia_controller = new ProvinciaController(); 
+    const finca_controller = new FincaController(); 
+    const equipos_controller = new EquiposController(); 
+    const cultivos_controller = new CultivosController(); 
+    const animals_controller = new AnimalsController(); 
 
 
     app.use('/apis', user_controller.router);
+    app.use('/apis', provincia_controller.router);
+    app.use('/apis', finca_controller.router);
+    app.use('/apis', user_controller.router);
+    app.use('/apis', equipos_controller.router);
+    app.use('/apis', cultivos_controller.router);
+    app.use('/apis', animals_controller.router);
 
     module.exports = app;
 

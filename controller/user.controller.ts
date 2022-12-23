@@ -65,13 +65,14 @@ export class UserController {
     public updateUsuario = async (req: Request, res: Response) => {
      //   const token = req.query.token;
 
-        const body = req.body;
-        const usuario = body.usuario;
-        const nombre = body.nombre; 
+        const body = req.body; 
+        const nombre = body.name; 
+        const edad = req.body.age; 
       //  const valid: any = await AppDataSource.manager.find(Token, { where: { token: token } });
       //  if (valid.length > 0) {
             await AppDataSource.manager.update(User, req.params.id, { 
                 name: nombre, 
+               age :edad 
             });
             return res.status(200).send({ message: 'usuario actualizado correctamente' });
     //    }
