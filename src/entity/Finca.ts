@@ -8,6 +8,8 @@ export class Finca {
 
     @Column()
     name: string
- 
+
+    @Column()
+    provincia: string
 
 }

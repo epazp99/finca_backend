@@ -8,6 +8,8 @@ export class Provincia {
 
     @Column()
     name: string
- 
+
+    @Column()
+    idFinca: number 
 
 }

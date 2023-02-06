@@ -32,7 +32,8 @@ export class UserController {
             console.log(req.body);
  
             const nombre = req.body.name; 
-            const edad = req.body.age; 
+            const rol = req.body.rol;
+            const idFinca = req.body.idFinca; 
          
             if (await (await AppDataSource.manager.find(User, { where: { name: nombre} })).length == 0) {
               //  bcrypt.hash(password, 10, async (err, encrypted) => {
@@ -41,7 +42,8 @@ export class UserController {
                  //   } else {
                         const user = new User(); 
                         user.name = nombre; 
-                        user.age = edad;   
+                        user.rol = rol; 
+                        user.idFinca = idFinca;   
                         await AppDataSource.manager.save(User, user);
                         return res.status(200).send({ message: 'Usuario agregado correctamente' });
                 //    }
@@ -67,12 +69,14 @@ export class UserController {
 
         const body = req.body; 
         const nombre = body.name; 
-        const edad = req.body.age; 
+        const rol = req.body.rol; 
+        const idFinca = req.body.idFinca; 
       //  const valid: any = await AppDataSource.manager.find(Token, { where: { token: token } });
       //  if (valid.length > 0) {
             await AppDataSource.manager.update(User, req.params.id, { 
                 name: nombre, 
-               age :edad 
+               rol :rol,
+               idFinca: idFinca 
             });
             return res.status(200).send({ message: 'usuario actualizado correctamente' });
     //    }

@@ -23,11 +23,13 @@ export class ProvinciaController {
             console.log(req.body);
  
             const nombre = req.body.name; 
+            const idFinca = req.body.idFinca; 
          
             if (await (await AppDataSource.manager.find(Provincia, { where: { name: nombre} })).length == 0) {
           
                         const provincia = new Provincia(); 
                         provincia.name = nombre;   
+                        provincia.idFinca = idFinca;  
                         await AppDataSource.manager.save(Provincia, provincia);
                         return res.status(200).send({ message: 'Usuario agregado correctamente' });
  
@@ -45,8 +47,11 @@ export class ProvinciaController {
  
         const body = req.body; 
         const nombre = body.name;  
+        const idFinca = req.body.idFinca; 
+
             await AppDataSource.manager.update(Provincia, req.params.id, { 
                 name: nombre, 
+                idFinca: idFinca, 
             });
             return res.status(200).send({ message: 'usuario actualizado correctamente' }); 
     }

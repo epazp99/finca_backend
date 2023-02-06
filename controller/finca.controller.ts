@@ -21,12 +21,14 @@ export class FincaController {
  
             console.log(req.body);
  
-            const nombre = req.body.name; 
+            const nombre = req.body.name;  
+            const provincia = req.body.provincia; 
          
             if (await (await AppDataSource.manager.find(Finca, { where: { name: nombre} })).length == 0) {
  
                         const user = new Finca(); 
                         user.name = nombre;   
+                        user.provincia = provincia;   
                         await AppDataSource.manager.save(Finca, user);
                         return res.status(200).send({ message: 'Usuario agregado correctamente' });
           
@@ -45,9 +47,11 @@ export class FincaController {
 
         const body = req.body; 
         const nombre = body.name; 
+        const provincia = body.provincia; 
  
             await AppDataSource.manager.update(Finca, req.params.id, { 
                 name: nombre, 
+                provincia: provincia, 
             });
             return res.status(200).send({ message: 'usuario actualizado correctamente' });
  

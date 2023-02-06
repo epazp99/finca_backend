@@ -25,27 +25,21 @@ export class AnimalsController {
             const nombre = req.body.name;  
             const especie = req.body.especie;
             const category = req.body.category;
-            const mes = req.body.mes;
-            const anno = req.body.anno; 
-            const bajas = req.body.bajas;
-            const altas = req.body.altas; 
- 
+            const fecha = req.body.fecha; 
          
             if (await (await AppDataSource.manager.find(Animals, { where: { name: nombre} })).length == 0) {
              
                         const user = new Animals(); 
+                        user.name = nombre;    
                         user.especie = especie;     
                         user.category = category;   
-                        user.mes = mes;   
-                        user.anno = anno;    
-                        user.bajas = bajas;   
-                        user.altas = altas;     
+                        user.fecha = fecha;    
 
                         await AppDataSource.manager.save(Animals, user);
-                        return res.status(200).send({ message: 'Usuario agregado correctamente' });
+                        return res.status(200).send({ message: 'animal agregado correctamente' });
           
             } else
-                return res.status(400).send({ message: 'El usuario ya esta siendo usado' });
+                return res.status(400).send({ message: 'El animal ya esta siendo usado' });
  
     }
 
@@ -62,21 +56,15 @@ export class AnimalsController {
         const nombre = body.name;  
         const especie = req.body.especie;
         const category = req.body.category;
-        const mes = req.body.mes;
-        const anno = req.body.anno; 
-        const bajas = req.body.bajas;
-        const altas = req.body.altas; 
+        const fecha = req.body.fecha; 
 
             await AppDataSource.manager.update(Animals, req.params.id, { 
                 name: nombre, 
                 especie: especie, 
                 category:category,   
-                mes: mes,   
-                anno : anno,    
-                bajas :bajas,   
-                altas: altas  
+                fecha: fecha,    
             });
-            return res.status(200).send({ message: 'usuario actualizado correctamente' }); 
+            return res.status(200).send({ message: 'animal actualizado correctamente' }); 
     }
  
     public routes() {

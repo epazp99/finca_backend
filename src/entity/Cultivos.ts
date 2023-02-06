@@ -13,40 +13,16 @@ export class Cultivos {
     idFinca: string
 
     @Column()
-    tipo: string
+    tipo: string 
 
     @Column()
-    centroElaboracion: string
+    plan: number 
 
     @Column()
-    um: string
+    real: number   
 
-    @Column()
-    plan: number
-
-    @Column()
-    finca: string
-
-    @Column()
-    toDate: number
-
-    @Column()
-    real: number
-
-    @Column()
-    porcent: number
-
-    @Column()
-    planCampanna: string
-
-    @Column()
-    acumulado: number
-
-    @Column()
-    mes: number
-
-    @Column()
-    anno: number
+    @Column({nullable:true})
+    fecha: Date 
 
     @Column()
     areaExistencia: string
@@ -55,6 +31,6 @@ export class Cultivos {
     tierraMov: string
 
     @Column()
-    tierraLista: string
+    tierraLista: string 
 
 }

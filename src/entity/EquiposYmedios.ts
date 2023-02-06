@@ -10,23 +10,13 @@ export class EquiposYmedios {
     name: string
 
     @Column()
-    idFinca: string 
-
-    @Column()
-    finca: string
-
-
-    @Column()
-    provincia: string
+    idFinca: string  
 
     @Column()
     parque: string
 
-    @Column()
-    mes: number
-
-    @Column()
-    anno: number
+    @Column({nullable:true})
+    fecha: Date 
 
     @Column()
     activos: number

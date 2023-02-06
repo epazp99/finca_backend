@@ -25,34 +25,20 @@ export class CultivosController {
             const finca = req.body.finca;
             const plan = req.body.plan;
             const tipo = req.body.tipo;
-            const mes = req.body.mes;
-            const anno = req.body.anno;
-            const um = req.body.um;
-            const centroElaboracion = req.body.centroElaboracion;
-            const toDate = req.body.toDate;
-            const real = req.body.real;
-            const porcent = req.body.porcent;
-            const planCampanna = req.body.planCampanna;
-            const acumulado = req.body.acumulado;
+            const fecha = req.body.fecha; 
+            const centroElaboracion = req.body.centroElaboracion; 
+            const real = req.body.real;  
             const areaExistencia = req.body.areaExistencia;
             const tierraMov = req.body.tierraMov;
-            const tierraLista = req.body.tierraLista;
+            const tierraLista = req.body.tierraLista;  
         
             if (await (await AppDataSource.manager.find(Cultivos, { where: { name: nombre} })).length == 0) {
  
                         const user = new Cultivos(); 
                         user.name = nombre;  
-                        user.finca = finca;  
-                        user.tipo = tipo;  
-                        user.mes = mes;  
-                        user.anno = anno;  
-                        user.um = um;  
-                        user.centroElaboracion = centroElaboracion;  
-                        user.toDate = toDate;  
-                        user.real = real;  
-                        user.porcent = porcent;  
-                        user.planCampanna = planCampanna;  
-                        user.acumulado = acumulado;  
+                        user.fecha = fecha;    
+                        user.tipo = tipo;    
+                        user.real = real;     
                         user.areaExistencia = areaExistencia;   
                         user.tierraLista = tierraLista;   
                         user.tierraMov = tierraMov;   
@@ -77,35 +63,20 @@ export class CultivosController {
         const finca = req.body.finca;
         const plan = req.body.plan;
         const tipo = req.body.tipo;
-        const mes = req.body.mes;
-        const anno = req.body.anno;
-        const um = req.body.um;
-        const centroElaboracion = req.body.centroElaboracion;
-        const toDate = req.body.toDate;
-        const real = req.body.real;
-        const porcent = req.body.porcent;
-        const planCampanna = req.body.planCampanna;
-        const acumulado = req.body.acumulado;
+        const fecha = req.body.fecha;  
+        const real = req.body.real;  
         const areaExistencia = req.body.areaExistencia;
         const tierraMov = req.body.tierraMov;
-        const tierraLista = req.body.tierraLista;
+        const tierraLista = req.body.tierraLista;  
  
             await AppDataSource.manager.update(Cultivos, req.params.id, { 
                 name: nombre, 
-                finca: finca,
-                tipo : tipo,
-                mes : mes,  
-                anno : anno,  
-                um : um,  
-                centroElaboracion :centroElaboracion,  
-                toDate : toDate,  
-                real : real,  
-                porcent : porcent,  
-                planCampanna: planCampanna, 
-                acumulado: acumulado,  
+                fecha: fecha,
+                tipo : tipo,  
+                real : real,   
                 areaExistencia : areaExistencia,  
                 tierraLista: tierraLista, 
-                tierraMov : tierraMov  
+                tierraMov : tierraMov,  
             });
             return res.status(200).send({ message: 'usuario actualizado correctamente' }); 
     }

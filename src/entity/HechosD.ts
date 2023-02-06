@@ -1,18 +1,24 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
 
 @Entity()
-export class User {
+export class HechosD {
 
     @PrimaryGeneratedColumn()
-    id: number
+    id: number 
 
     @Column()
     idFinca: string
 
     @Column()
-    name: string
-  
+    area: string 
+
     @Column()
-    rol: number
+    afectaciones: string 
+
+    @Column()
+    nombre: string   
+
+    @Column({nullable:true})
+    fecha: Date  
 
 }

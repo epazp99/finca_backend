@@ -24,11 +24,9 @@ export class EquiposController {
             console.log(req.body);
  
             const nombre = req.body.name;
-            const finca = req.body.finca;
-            const provincia = req.body.provincia;
+            const idFinca = req.body.finca; 
             const parque = req.body.parque;
-            const mes = req.body.mes;
-            const anno = req.body.anno;
+            const fecha = req.body.fecha; 
             const activos = req.body.activos;
             const incidencias = req.body.incidencias;
              
@@ -38,11 +36,9 @@ export class EquiposController {
    
                         const user = new EquiposYmedios(); 
                         user.name = nombre; 
-                        user.finca = finca; 
-                        user.provincia = provincia; 
-                        user.parque = parque; 
-                        user.mes = mes; 
-                        user.anno = anno; 
+                        user.idFinca = idFinca; 
+                        user.fecha = fecha;  
+                        user.parque = parque;  
                         user.activos = activos;   
                         user.incidencias = incidencias;
 
@@ -65,22 +61,18 @@ export class EquiposController {
  
         const body = req.body; 
         const nombre = body.name; 
-        const finca = req.body.finca;
-        const provincia = req.body.provincia;
-        const parque = req.body.parque;
-        const mes = req.body.mes;
-        const anno = req.body.anno;
+        const idFinca = req.body.idFinca; 
+        const parque = req.body.parque; 
+        const fecha = req.body.fecha;
         const activos = req.body.activos;
         const incidencias = req.body.incidencias;
 
  
             await AppDataSource.manager.update(EquiposYmedios, req.params.id, { 
                 name: nombre, 
-                finca: finca,
-                provincia: provincia, 
-                parque: parque, 
-                mes: mes,
-                anno: anno, 
+                idFinca: idFinca,
+                fecha: fecha,  
+                parque: parque,  
                 activos: activos,   
                 incidencias: incidencias
             });
