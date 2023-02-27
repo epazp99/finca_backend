@@ -12,8 +12,9 @@ export class CultivosController {
         this.routes();
     }
 
-    public getCultivos = async (req: Request, res: Response) => {
-               return res.status(200).send(await AppDataSource.manager.find(Cultivos));
+    public getCultivos = async (req: Request, res: Response) => { 
+        const idFinca = req.query.idFinca;
+           return res.status(200).send(await AppDataSource.manager.find(Cultivos, {where: { idFinca: idFinca }}));
        
     }
 
@@ -21,6 +22,7 @@ export class CultivosController {
  
             console.log(req.body);
  
+            const idFinca = req.body.idFinca; 
             const nombre = req.body.name; 
             const finca = req.body.finca;
             const plan = req.body.plan;
@@ -36,9 +38,11 @@ export class CultivosController {
  
                         const user = new Cultivos(); 
                         user.name = nombre;  
-                        user.fecha = fecha;    
+                        user.fecha = fecha;
+                        user.idFinca = idFinca;    
                         user.tipo = tipo;    
-                        user.real = real;     
+                        user.real = real;  
+                        user.plan = plan;     
                         user.areaExistencia = areaExistencia;   
                         user.tierraLista = tierraLista;   
                         user.tierraMov = tierraMov;   
@@ -69,15 +73,19 @@ export class CultivosController {
         const tierraMov = req.body.tierraMov;
         const tierraLista = req.body.tierraLista;  
  
-            await AppDataSource.manager.update(Cultivos, req.params.id, { 
-                name: nombre, 
-                fecha: fecha,
-                tipo : tipo,  
-                real : real,   
-                areaExistencia : areaExistencia,  
-                tierraLista: tierraLista, 
-                tierraMov : tierraMov,  
-            });
+        const existente = await (await AppDataSource.manager.find(Cultivos, { where: { id: req.params.id } })).pop();
+
+        await AppDataSource.manager.update(Cultivos, req.params.id, { 
+            name: nombre!=null && nombre!='' ? nombre : existente.name, 
+            tipo: tipo!=null && tipo!='' ? tipo : existente.tipo , 
+            real: real!=null && real!='' ? real : existente.real ,   
+            plan: plan!=null && plan!='' ? plan : existente.plan ,   
+            fecha: fecha!=null && fecha!='' ? fecha : existente.fecha ,   
+            areaExistencia: areaExistencia!=null && areaExistencia!='' ? areaExistencia : existente.areaExistencia ,   
+            tierraLista: tierraLista!=null && tierraLista!='' ? tierraLista : existente.tierraLista ,   
+            tierraMov: tierraMov!=null && tierraMov!='' ? tierraMov : existente.tierraMov ,     
+        });
+ 
             return res.status(200).send({ message: 'usuario actualizado correctamente' }); 
     }
 

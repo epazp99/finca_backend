@@ -14,8 +14,8 @@ export class EquiposController {
     }
 
     public getEquipos = async (req: Request, res: Response) => {
- 
-            return res.status(200).send(await AppDataSource.manager.find(EquiposYmedios));
+        const idFinca = req.query.idFinca; 
+            return res.status(200).send(await AppDataSource.manager.find(EquiposYmedios, {where: { idFinca: idFinca }} ));
  
     }
 
@@ -24,7 +24,7 @@ export class EquiposController {
             console.log(req.body);
  
             const nombre = req.body.name;
-            const idFinca = req.body.finca; 
+            const idFinca = req.body.idFinca; 
             const parque = req.body.parque;
             const fecha = req.body.fecha; 
             const activos = req.body.activos;
@@ -67,15 +67,15 @@ export class EquiposController {
         const activos = req.body.activos;
         const incidencias = req.body.incidencias;
 
- 
-            await AppDataSource.manager.update(EquiposYmedios, req.params.id, { 
-                name: nombre, 
-                idFinca: idFinca,
-                fecha: fecha,  
-                parque: parque,  
-                activos: activos,   
-                incidencias: incidencias
-            });
+        const existente = await (await AppDataSource.manager.find(EquiposYmedios, { where: { id: req.params.id } })).pop();
+
+        await AppDataSource.manager.update(EquiposYmedios, req.params.id, { 
+            name: nombre!=null && nombre!='' ? nombre : existente.name, 
+            parque: parque!=null && parque!='' ? parque : existente.parque , 
+            activos: activos!=null && activos!='' ? activos : existente.activos ,   
+            incidencias: incidencias!=null && incidencias!='' ? incidencias : existente.incidencias , 
+            fecha: fecha!=null && fecha!='' ? fecha : existente.fecha ,    
+        }); 
             return res.status(200).send({ message: 'usuario actualizado correctamente' });
  
     }

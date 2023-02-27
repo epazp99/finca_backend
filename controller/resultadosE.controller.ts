@@ -13,7 +13,8 @@ export class ResultadosEconomicosController {
     }
 
     public getCultivos = async (req: Request, res: Response) => {
-               return res.status(200).send(await AppDataSource.manager.find(ResultadosEconomicos));
+        const idFinca = req.query.idFinca; 
+               return res.status(200).send(await AppDataSource.manager.find(ResultadosEconomicos, {where: { idFinca: idFinca }} ));
        
     }
 
@@ -55,24 +56,22 @@ export class ResultadosEconomicosController {
 
     public updateCultivos= async (req: Request, res: Response) => { 
 
-        const body = req.body; 
-        const id = req.body.id;
-        const total = req.body.total;
-        const idFinca = req.body.idFinca;
+        const body = req.body;  
+        const total = req.body.total; 
         const plan = req.body.plan;
         const real = req.body.real; 
         const fecha = req.body.fecha;  
         const incidencias = req.body.incidencias;
- 
-            await AppDataSource.manager.update(ResultadosEconomicos, req.params.id, { 
-                id: id, 
-                total: total,
-                idFinca : idFinca,  
-                plan : plan,   
-                real : real,  
-                fecha: fecha,
-                incidencias: incidencias,  
-            });
+
+        const existente = await (await AppDataSource.manager.find(ResultadosEconomicos, { where: { id: req.params.id } })).pop();
+
+        await AppDataSource.manager.update(ResultadosEconomicos, req.params.id, { 
+            real: real!=null && real!='' ? real : existente.real ,   
+            plan: plan!=null && plan!='' ? plan : existente.plan  , 
+            total: total!=null && total!='' ? total : existente.total , 
+            incidencias: incidencias!=null && incidencias!='' ? incidencias : existente.incidencias ,   
+            fecha: fecha!=null && fecha!='' ? fecha : existente.fecha ,    
+        }); 
             return res.status(200).send({ message: 'usuario actualizado correctamente' }); 
     }
 

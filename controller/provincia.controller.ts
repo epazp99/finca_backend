@@ -13,8 +13,8 @@ export class ProvinciaController {
     }
 
     public getProvincia = async (req: Request, res: Response) => {
- 
-            return res.status(200).send(await AppDataSource.manager.find(Provincia));
+        const idFinca = req.query.idFinca;  
+            return res.status(200).send(await AppDataSource.manager.find(Provincia, {where: { idFinca: idFinca }} ));
      
     }
 
@@ -46,13 +46,14 @@ export class ProvinciaController {
     public updateProvincia = async (req: Request, res: Response) => {
  
         const body = req.body; 
-        const nombre = body.name;  
-        const idFinca = req.body.idFinca; 
+        const nombre = body.name;   
 
-            await AppDataSource.manager.update(Provincia, req.params.id, { 
-                name: nombre, 
-                idFinca: idFinca, 
-            });
+        const existente = await (await AppDataSource.manager.find(Provincia, { where: { id: req.params.id } })).pop();
+
+        await AppDataSource.manager.update(Provincia, req.params.id, { 
+            name: nombre!=null && nombre!='' ? nombre : existente.name,       
+        });
+ 
             return res.status(200).send({ message: 'usuario actualizado correctamente' }); 
     }
 

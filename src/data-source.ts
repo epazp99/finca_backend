@@ -6,6 +6,11 @@ import { EquiposYmedios } from "./entity/EquiposYmedios"
 import { Finca } from "./entity/Finca"
 import { Provincia } from "./entity/Provincia"
 import { User } from "./entity/User"
+import { ResultadosEconomicos } from "./entity/ResultadosEconomicos"
+import { HechosD } from "./entity/HechosD"
+import { DatosEconomicos } from "./entity/DatosEconomicos"
+import { Bajas } from "./entity/Bajas"
+import { Altas } from "./entity/Altas"
 
 export const AppDataSource = new DataSource({
     type: "mysql",
@@ -16,7 +21,7 @@ export const AppDataSource = new DataSource({
     database: "finca",
     synchronize: true,
     logging: false,
-    entities: [User, Animals, Cultivos, EquiposYmedios, Finca, Provincia],
+    entities: [User, Animals, Cultivos, EquiposYmedios, Finca, Provincia, ResultadosEconomicos, DatosEconomicos, HechosD, Bajas, Altas],
     migrations: [],
     subscribers: [],
 })

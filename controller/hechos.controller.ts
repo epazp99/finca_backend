@@ -13,7 +13,8 @@ export class HechosDController {
     }
 
     public getCultivos = async (req: Request, res: Response) => {
-               return res.status(200).send(await AppDataSource.manager.find(HechosD));
+        const idFinca = req.query.idFinca; 
+               return res.status(200).send(await AppDataSource.manager.find(HechosD, {where: { idFinca: idFinca }} ));
        
     }
 
@@ -22,10 +23,10 @@ export class HechosDController {
             console.log(req.body);
  
             const id = req.body.id; 
-            const area = req.body.area;
-            const idFinca = req.body.idFinca;
+            const area = req.body.area; 
             const afectaciones = req.body.afectaciones;
             const nombre = req.body.nombre; 
+            const idFinca = req.body.idFinca; 
             const fecha = req.body.fecha;  
         
             if (await (await AppDataSource.manager.find(HechosD, { where: { id: id} })).length == 0) {
@@ -33,9 +34,9 @@ export class HechosDController {
                         const user = new HechosD(); 
                         user.id = id;  
                         user.fecha = fecha;  
-                        user.nombre = nombre;    
-                        user.afectaciones = afectaciones;    
-                        user.idFinca = idFinca;     
+                        user.nombre = nombre;  
+                        user.idFinca = idFinca;  
+                        user.afectaciones = afectaciones;     
                         user.area = area;      
 
                         await AppDataSource.manager.save(HechosD, user);
@@ -53,22 +54,21 @@ export class HechosDController {
 
     public updateCultivos= async (req: Request, res: Response) => { 
 
-        const body = req.body; 
-        const id = body.id; 
-        const area = req.body.area;
-        const idFinca = req.body.idFinca;
+        const body = req.body;  
+        const area = req.body.area; 
         const afectaciones = req.body.afectaciones;
         const nombre = req.body.nombre; 
         const fecha = req.body.fecha;  
- 
-            await AppDataSource.manager.update(HechosD, req.params.id, { 
-                id: id, 
-                area: area,
-                idFinca : idFinca,  
-                afectaciones : afectaciones,   
-                nombre : nombre,  
-                fecha: fecha,  
-            });
+
+        const existente = await (await AppDataSource.manager.find(HechosD, { where: { id: req.params.id } })).pop();
+
+        await AppDataSource.manager.update(HechosD, req.params.id, { 
+            nombre: nombre!=null && nombre!='' ? nombre : existente.nombre, 
+            area: area!=null && area!='' ? area : existente.area , 
+            afectaciones: afectaciones!=null && afectaciones!='' ? afectaciones : existente.afectaciones ,    
+            fecha: fecha!=null && fecha!='' ? fecha : existente.fecha ,       
+        });
+  
             return res.status(200).send({ message: 'usuario actualizado correctamente' }); 
     }
 

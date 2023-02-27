@@ -13,7 +13,8 @@ export class DatosEconomicosController {
     }
 
     public getCultivos = async (req: Request, res: Response) => {
-               return res.status(200).send(await AppDataSource.manager.find(DatosEconomicos));
+        const idFinca = req.query.idFinca; 
+               return res.status(200).send(await AppDataSource.manager.find(DatosEconomicos, {where: { idFinca: idFinca }} ));
        
     }
 
@@ -53,23 +54,21 @@ export class DatosEconomicosController {
 
     public updateCultivos= async (req: Request, res: Response) => { 
 
-        const body = req.body; 
-        const id = req.body.id;
-        const salario = req.body.salario;
-        const idFinca = req.body.idFinca;
+        const body = req.body;  
+        const salario = req.body.salario; 
         const promedio = req.body.promedio;
         const productividad = req.body.productividad; 
         const fecha = req.body.fecha;  
- 
-            await AppDataSource.manager.update(DatosEconomicos, req.params.id, { 
-                id: id, 
-                salario: salario,
-                idFinca : idFinca,  
-                promedio : promedio,   
-                productividad : productividad,  
-                fecha: fecha,  
-            });
-            return res.status(200).send({ message: 'usuario actualizado correctamente' }); 
+
+        const existente = await (await AppDataSource.manager.find(DatosEconomicos, { where: { id: req.params.id } })).pop();
+
+        await AppDataSource.manager.update(DatosEconomicos, req.params.id, { 
+            salario: salario!=null && salario!='' ? salario : existente.salario, 
+            promedio: promedio!=null && promedio!='' ? promedio : existente.promedio , 
+            productividad: productividad!=null && productividad!='' ? productividad : existente.productividad ,   
+            fecha: fecha!=null && fecha!='' ? fecha : existente.fecha ,    
+        }); 
+            return res.status(200).send({ message: 'DatosEconomicos actualizado correctamente' }); 
     }
 
      

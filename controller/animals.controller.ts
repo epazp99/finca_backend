@@ -14,8 +14,9 @@ export class AnimalsController {
     }
 
     public getAnimals = async (req: Request, res: Response) => {
- 
-            return res.status(200).send(await AppDataSource.manager.find(Animals)); 
+        const idFinca = req.query.idFinca;
+           
+            return res.status(200).send(await AppDataSource.manager.find(Animals, {where: { idFinca: idFinca }} )); 
     }
 
     public addAnimals = async (req: Request, res: Response) => {
@@ -26,6 +27,7 @@ export class AnimalsController {
             const especie = req.body.especie;
             const category = req.body.category;
             const fecha = req.body.fecha; 
+            const idFinca = req.body.idFinca; 
          
             if (await (await AppDataSource.manager.find(Animals, { where: { name: nombre} })).length == 0) {
              
@@ -33,7 +35,8 @@ export class AnimalsController {
                         user.name = nombre;    
                         user.especie = especie;     
                         user.category = category;   
-                        user.fecha = fecha;    
+                        user.fecha = fecha;   
+                        user.idFinca = idFinca;  
 
                         await AppDataSource.manager.save(Animals, user);
                         return res.status(200).send({ message: 'animal agregado correctamente' });
@@ -56,13 +59,15 @@ export class AnimalsController {
         const nombre = body.name;  
         const especie = req.body.especie;
         const category = req.body.category;
-        const fecha = req.body.fecha; 
+        const fecha = req.body.fecha;  
+
+        const existente = await (await AppDataSource.manager.find(Animals, { where: { id: req.params.id } })).pop();
 
             await AppDataSource.manager.update(Animals, req.params.id, { 
-                name: nombre, 
-                especie: especie, 
-                category:category,   
-                fecha: fecha,    
+                name: nombre!=null && nombre!='' ? nombre : existente.name, 
+                especie: especie!=null && especie!='' ? especie : existente.especie , 
+                category: category!=null && category!='' ? category : existente.category ,   
+                fecha: fecha!=null && fecha!='' ? fecha : existente.fecha ,     
             });
             return res.status(200).send({ message: 'animal actualizado correctamente' }); 
     }

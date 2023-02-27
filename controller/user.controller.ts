@@ -16,7 +16,7 @@ export class UserController {
     }
 
     public getUsuario = async (req: Request, res: Response) => {
-        // const token = req.query.token;
+        
         // const valid: any = await AppDataSource.manager.find(Token, { where: { token: token } });
         // if (valid.length > 0) {
             return res.status(200).send(await AppDataSource.manager.find(User));
@@ -69,15 +69,16 @@ export class UserController {
 
         const body = req.body; 
         const nombre = body.name; 
-        const rol = req.body.rol; 
-        const idFinca = req.body.idFinca; 
+        const rol = req.body.rol;  
       //  const valid: any = await AppDataSource.manager.find(Token, { where: { token: token } });
       //  if (valid.length > 0) {
-            await AppDataSource.manager.update(User, req.params.id, { 
-                name: nombre, 
-               rol :rol,
-               idFinca: idFinca 
-            });
+
+      const existente = await (await AppDataSource.manager.find(User, { where: { id: req.params.id } })).pop();
+
+      await AppDataSource.manager.update(User, req.params.id, { 
+          name: nombre!=null && nombre!='' ? nombre : existente.name, 
+          rol: rol!=null && rol!='' ? rol : existente.rol ,      
+      }); 
             return res.status(200).send({ message: 'usuario actualizado correctamente' });
     //    }
       //  return res.status(401).send({ message: 'Usted no tiene acceso a este componente' });

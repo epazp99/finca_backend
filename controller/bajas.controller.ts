@@ -12,7 +12,7 @@ export class BajasController {
         this.routes();
     }
 
-    public getCultivos = async (req: Request, res: Response) => {
+    public getCultivos = async (req: Request, res: Response) => { 
                return res.status(200).send(await AppDataSource.manager.find(Bajas));
        
     }
@@ -66,17 +66,18 @@ export class BajasController {
         const CT = req.body.CT; 
         const TC = req.body.TC;  
         const T = req.body.T;  
- 
-            await AppDataSource.manager.update(Bajas, req.params.id, { 
-                id: id, 
-                idAnimal: idAnimal,
-                P : P,  
-                AC : AC,   
-                T : T,  
-                EL: EL, 
-                TC : TC,  
-                CT : CT,   
-            });
+
+        const existente = await (await AppDataSource.manager.find(Bajas, { where: { id: req.params.id } })).pop();
+
+        await AppDataSource.manager.update(Bajas, req.params.id, {     
+            P :  P!=null && P!='' ? P : existente.P ,  
+            AC : AC!=null && AC!='' ? AC : existente.AC ,   
+            T : T!=null && T!='' ? T : existente.T  ,  
+            TC: TC!=null && TC!='' ? TC : existente.TC , 
+            CT : CT!=null && CT!='' ? CT : existente.CT ,  
+            EL: EL!=null && EL!='' ?EL : existente.EL
+        });
+  
             return res.status(200).send({ message: 'usuario actualizado correctamente' }); 
     }
 

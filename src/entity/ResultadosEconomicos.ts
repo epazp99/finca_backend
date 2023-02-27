@@ -13,7 +13,7 @@ export class ResultadosEconomicos {
     total: string 
 
     @Column()
-    plan: Double 
+    plan: string 
 
     @Column()
     real: string   
@@ -23,5 +23,4 @@ export class ResultadosEconomicos {
 
     @Column({nullable:true})
     fecha: Date  
-
 }

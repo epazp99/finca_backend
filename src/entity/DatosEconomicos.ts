@@ -13,7 +13,7 @@ export class DatosEconomicos {
     salario: string 
 
     @Column()
-    promedio: Double 
+    promedio: string 
 
     @Column()
     productividad: string   

@@ -3,6 +3,7 @@ import moment = require('moment');
 import { MoreThanOrEqual } from 'typeorm';
 import { AppDataSource } from '../src/data-source'; 
 import { Altas } from '../src/entity/Altas'; 
+import { Cultivos } from '../src/entity/Cultivos';
      
 export class AltasController {
     public router: Router;
@@ -12,7 +13,8 @@ export class AltasController {
         this.routes();
     }
 
-    public getCultivos = async (req: Request, res: Response) => {
+    public getCultivos = async (req: Request, res: Response) => { 
+
                return res.status(200).send(await AppDataSource.manager.find(Altas));
        
     }
@@ -65,18 +67,19 @@ export class AltasController {
         const MT = req.body.MT; 
         const VTA = req.body.VTA; 
         const TC = req.body.TC;  
-        const EF = req.body.EF;   
- 
-            await AppDataSource.manager.update(Altas, req.params.id, { 
-                id: id, 
-                idAnimal: idAnimal,
-                S : S,  
-                AC : AC,   
-                MT : MT,  
-                VTA: VTA, 
-                TC : TC,  
-                EF: EF
+        const EF = req.body.EF;    
+
+            const existente = await (await AppDataSource.manager.find(Altas, { where: { id: req.params.id } })).pop();
+
+            await AppDataSource.manager.update(Altas, req.params.id, {     
+                S :  S!=null && S!='' ? S : existente.S ,  
+                AC : AC!=null && AC!='' ? AC : existente.AC ,   
+                MT : MT!=null && MT!='' ? MT : existente.MT  ,  
+                VTA: VTA!=null && VTA!='' ? VTA : existente.VTA , 
+                TC : TC!=null && TC!='' ? TC : existente.TC ,  
+                EF: EF!=null && EF!='' ?EF : existente.EF
             });
+
             return res.status(200).send({ message: 'usuario actualizado correctamente' }); 
     }
 

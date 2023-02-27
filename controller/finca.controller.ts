@@ -48,12 +48,15 @@ export class FincaController {
         const body = req.body; 
         const nombre = body.name; 
         const provincia = body.provincia; 
- 
-            await AppDataSource.manager.update(Finca, req.params.id, { 
-                name: nombre, 
-                provincia: provincia, 
-            });
-            return res.status(200).send({ message: 'usuario actualizado correctamente' });
+
+        const existente = await (await AppDataSource.manager.find(Finca, { where: { id: req.params.id } })).pop();
+
+        await AppDataSource.manager.update(Finca, req.params.id, { 
+            name: nombre!=null && nombre!='' ? nombre : existente.name, 
+            provincia: provincia!=null && provincia!='' ? provincia : existente.provincia ,      
+        });
+  
+            return res.status(200).send({ message: 'Finca actualizado correctamente' });
  
     }
  
